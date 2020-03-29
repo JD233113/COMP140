@@ -179,9 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd39f4c199a3d84ba03f436017562a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementScale: 15
+  movementScale: 50
   jumpScale: 550
-  maxSpeed: 10
+  maxSpeed: 15
 --- !u!50 &163564764
 Rigidbody2D:
   serializedVersion: 4
@@ -201,7 +201,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &163564765
 MonoBehaviour:
@@ -439,7 +439,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 966437640}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 76acdc09e7a4d5a44a0fe95f4fbeeee7, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
