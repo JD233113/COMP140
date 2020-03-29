@@ -9,18 +9,30 @@ public class PlayerMovement : MonoBehaviour
     public float jumpScale;
     public float maxSpeed;
     bool isGrounded;
+    float scale;
 
     // Start is called before the first frame update
     void Start()
     {
         //Stores the rigidbody to reduce the number of times GetComponent() needs to be called
         rb = this.gameObject.GetComponent<Rigidbody2D>();
+
+        scale = transform.localScale.x;
     }
 
     void FixedUpdate()
     {
         //Checks whether the movement inputs are being used
         float xMovement = Input.GetAxis("Horizontal");
+
+        if (xMovement < 0)
+        {
+            transform.localScale = new Vector2(-scale, transform.localScale.y);
+        }
+        else if (xMovement > 0)
+        {
+            transform.localScale = new Vector2(scale, transform.localScale.y);
+        }
 
         //Additional force is only applied if the player is below the maximum speed
         if (rb.velocity.magnitude < maxSpeed)
