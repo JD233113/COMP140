@@ -8,6 +8,9 @@ public class PlayerAttack : MonoBehaviour
     Transform body;
     Rigidbody2D rb;
 
+    public ControllerInput controllerInput;
+    public GameObject blockSprite;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,17 +24,24 @@ public class PlayerAttack : MonoBehaviour
     {
         transform.position = this.gameObject.transform.GetChild(0).position;
 
-
-        if (Input.GetButtonDown("Fire1") == true)
+        //Attacks upon recieving associated keyboard/controller input
+        if (Input.GetButtonDown("Fire1") == true || controllerInput.state == 1)
         {
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SwordSwing"))
             {
                 animator.SetBool("isAttacking", true);
+                blockSprite.gameObject.SetActive(false);
             }
         }
         else
         {
             animator.SetBool("isAttacking", false);
+        }
+
+        //Blocks upon recieving associated controller input
+        if (controllerInput.state == 6)
+        {
+            blockSprite.gameObject.SetActive(true);
         }
     }
 }

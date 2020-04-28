@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class TutorialTextScript : MonoBehaviour
 {
-    //Destroys the gameobject the script is attached to when a key is pressed
+    public ControllerInput controllerInput;
+
+    //Destroys the gameobject the script is attached to when the player gives movement input
     void Update()
     {
-        if (Input.anyKeyDown)
+        if (Input.anyKeyDown || controllerInput.state == 2 || controllerInput.state == 3)
         {
             Destroy(this.gameObject);
         }

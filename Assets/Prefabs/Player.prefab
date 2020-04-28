@@ -113,6 +113,7 @@ MonoBehaviour:
   movementScale: 0
   jumpScale: 0
   maxSpeed: 0
+  controllerInput: {fileID: 0}
 --- !u!50 &7217367939239931187
 Rigidbody2D:
   serializedVersion: 4

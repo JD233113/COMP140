@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO.Ports;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,8 +12,12 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded;
     float scale;
     bool facingRight = true;
+    float xMovement = 0;
 
     Animator animator;
+
+    public ControllerInput controllerInput;
+    public GameObject blockSprite;
 
     // Start is called before the first frame update
     void Start()
@@ -27,10 +32,26 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         //Checks whether the movement inputs are being used
-        float xMovement = Input.GetAxis("Horizontal");
 
-        //Applies horizontal force to the rigidbody when the player attacks
-        if (Input.GetButtonDown("Fire1") == true && rb.velocity.magnitude < maxSpeed)
+        //Keyboard input
+        //float xMovement = Input.GetAxis("Horizontal");
+
+        //Joystick input
+        if (controllerInput.state == 2)
+        {
+            xMovement = 1;
+        }
+        else if (controllerInput.state == 3)
+        {
+            xMovement = -1;
+        }
+        else
+        {
+            xMovement = 0;
+        }
+
+        //Applies horizontal force to the rigidbody when the player attacks unless already at max speed
+        if (Input.GetButtonDown("Fire1") == true || controllerInput.state == 1 && rb.velocity.magnitude < maxSpeed)
         {
             if (facingRight == true)
             {
@@ -43,17 +64,21 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Flips the player character horizontally when the player moves left or right
+        //Also stops the player from blocking while moving
         if (xMovement < 0)
         {
             transform.localScale = new Vector2(-scale, transform.localScale.y);
             facingRight = false;
+            blockSprite.gameObject.SetActive(false);
         }
         else if (xMovement > 0)
         {
             transform.localScale = new Vector2(scale, transform.localScale.y);
             facingRight = true;
+            blockSprite.gameObject.SetActive(false);
         }
 
+        //Applies force for horizontal movement when controls are used
         //Additional force is only applied if the player is below the maximum speed
         if (rb.velocity.magnitude < maxSpeed)
         {
@@ -66,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
 
         //Applies force to the rigidbody whenever the jump input is used
         //Can only jump when grounded
-        if (Input.GetButtonDown("Jump") && isGrounded == true)
+        if (Input.GetButtonDown("Jump") || controllerInput.state == 5 && isGrounded == true)
         {
             int horizontalForce;
 
@@ -74,11 +99,11 @@ public class PlayerMovement : MonoBehaviour
             //Only applied if not already at the max speed
             if (facingRight && rb.velocity.magnitude < maxSpeed)
             {
-                horizontalForce = 250;
+                horizontalForce = 100;
             }
             else if (!facingRight && rb.velocity.magnitude < maxSpeed)
             {
-                horizontalForce = -250;
+                horizontalForce = -100;
             }
             else
             {
@@ -95,6 +120,12 @@ public class PlayerMovement : MonoBehaviour
             Vector2 movement = new Vector2(xMovement, 0);
 
             rb.AddForce(-2 * movementScale * movement);
+        }
+
+        //Ensures player can't block in the air
+        if (isGrounded == false)
+        {
+            blockSprite.gameObject.SetActive(false);
         }
     }
 
